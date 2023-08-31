@@ -1,0 +1,51 @@
+global:
+  queue:
+    svc: myrelease-rabbitmq
+    queue: evqueries
+  masto:
+    domain: botsin.space
+
+rabbitmq:
+  persistence:
+    enabled: false
+  auth:
+    username: admin
+    password: secretpassword
+    erlangCookie: secretcookie
+
+redis:
+  architecture: standalone
+  auth: 
+    enabled: false
+  master:
+    persistence:
+      enabled: false
+
+watcher:
+  watcher:
+    replicas: 1
+  masto:
+    notificationtoken: secrettoken
+    username: ev
+  queue:
+    produceruser: admin
+    producerpassword: secretpassword
+
+worker:
+  worker:
+    replicas: 1
+  masto:
+    posttoken: secrettoken
+    visibility: direct
+    postsize: 500
+  queue:
+    consumeruser: admin
+    consumerpassword: secretpassword
+  geocoder:
+    useragent: mybot/0.1.0
+  nrel:
+    token: secrettoken
+    stationnamelength: 30
+  cache:
+    svc: myrelease-redis-master
+    
