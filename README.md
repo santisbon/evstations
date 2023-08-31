@@ -1,7 +1,7 @@
 # EV Stations
 🧪 Experimental
 
-Source code for [@ev@botsin.space](https://botsin.space/@ev). A Mastodon bot to get electric vehicle (EV) charging stations near a location in the **United States** or **Canada**. The location needs to be specific enough to narrow it down to a relatively small area like a neighborhood. An entire city or borough won't do because it's too broad to be useful.  
+[@ev@botsin.space](https://botsin.space/@ev) is a Mastodon bot to get electric vehicle (EV) charging stations near a location in the **United States** or **Canada**. The location needs to be specific enough to narrow it down to a relatively small area like a neighborhood. An entire city or borough won't do because it's too broad to be useful.  
 
 ## Highlights
 * Mention it with just a requested location and it will reply with some charging stations near it. 
@@ -52,15 +52,6 @@ Architecture diagrams are available in the editable svg file `architecture.drawi
 </details>
 
 <p></p>
-
-Reviewing the architecture diagrams and source code is a great way to learn the basics of:
-* Loosely-coupled microservices.
-* Message brokers with long-running producers and consumers.
-* Caching.
-* Container orchestration.
-* Secrets management.
-* Handling server-sent events from a streaming API.
-* Consuming REST APIs.
 
 You'll need a Kubernetes distribution with `dns`, `helm`, and `metrics-server` addons enabled. For a Raspberry Pi deployment you can use MicroK8s.
 
