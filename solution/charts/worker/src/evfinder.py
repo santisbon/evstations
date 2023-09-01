@@ -24,7 +24,8 @@ class EVFinder(object):
             self.config = config
         else:
             self.config = {
-                'STATIONS_NEAR_LOC_URL' : 'https://developer.nrel.gov/api/alt-fuel-stations/v1.json',
+                'STATIONS_LOC_URL' : 'https://developer.nrel.gov/api/alt-fuel-stations/v1.json',
+                'STATIONS_NEAREST_LOC_URL' : 'https://developer.nrel.gov/api/alt-fuel-stations/v1/nearest.json',
                 'STATIONS_NEAR_ROUTE_URL' : 'https://developer.nrel.gov/api/alt-fuel-stations/v1/nearby-route.json',
                 'NREL_TOKEN' : NREL_TOKEN,
                 'LIMIT' : '10',
@@ -102,8 +103,24 @@ class EVFinder(object):
             headers = {'X-Api-Key': self.config.get('NREL_TOKEN')}
             
             http = urllib3.PoolManager()
-            response = http.request('GET', self.config.get('STATIONS_NEAR_LOC_URL'), fields=fields, headers=headers)
+            response = http.request('GET', self.config.get('STATIONS_LOC_URL'), fields=fields, headers=headers)
             
             return json.loads(response.data.decode("utf-8"))
         else:
             return None
+
+    def get_stations_nearest(self, location, radius=50, limit=10):
+        self.title = location
+
+        fields={'location': location,
+                'status': 'E',
+                'fuel_type': 'ELEC',
+                'radius' : radius,
+                'limit': limit}
+        headers = {'X-Api-Key': self.config.get('NREL_TOKEN')}
+        
+        http = urllib3.PoolManager()
+        response = http.request('GET', self.config.get('STATIONS_NEAREST_LOC_URL'), fields=fields, headers=headers)
+        
+        return json.loads(response.data.decode("utf-8"))
+    

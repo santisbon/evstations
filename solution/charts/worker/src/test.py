@@ -9,6 +9,19 @@ logging.basicConfig(format='%(asctime)s %(levelname)s:%(message)s', level=loggin
 
 class TestWorker(unittest.TestCase):
   #@unittest.skip("")
+  def test_get_stations_nearest(self):
+    finder = EVFinder()
+    station_list = utils.form_list_of_stations(finder.get_stations_nearest('wrigleyville, chicago', limit=5).get('fuel_stations'))
+    full_list = tabulate(station_list, tablefmt='plain') # plain | simple
+
+    chunks = utils.split_text_into_chunks(finder.title + '\n' + full_list)
+    for idx, chunk in enumerate(chunks, start=1):
+      logging.debug(f"Chunk {idx}:\n{chunk}\n")
+    
+    self.assertEqual(len(station_list), 5)
+    self.assertEqual(len(chunks), 2)
+
+  #@unittest.skip("")
   def test_set_location(self):
     finder = EVFinder()
     finder.set_location('west loop, chicago')
