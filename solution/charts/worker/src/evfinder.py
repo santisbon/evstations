@@ -109,18 +109,28 @@ class EVFinder(object):
         else:
             return None
 
-    def get_stations_nearest(self, location, radius=50, limit=10):
-        self.title = location
+    def get_stations_nearest(self, query, radius=50, limit=10):
+        self.title = query
+        key = str(query).strip().lower().replace(' ','+')
 
-        fields={'location': location,
-                'status': 'E',
-                'fuel_type': 'ELEC',
-                'radius' : radius,
-                'limit': limit}
-        headers = {'X-Api-Key': self.config.get('NREL_TOKEN')}
-        
-        http = urllib3.PoolManager()
-        response = http.request('GET', self.config.get('STATIONS_NEAREST_LOC_URL'), fields=fields, headers=headers)
-        
-        return json.loads(response.data.decode("utf-8"))
+        cached = r.get(key)
+
+        if cached:
+            logging.info("Cache hit")
+            results = json.loads(cached)
+        else:
+            logging.info("Cache miss")
+            fields={'location': query,
+                    'status': 'E',
+                    'fuel_type': 'ELEC',
+                    'radius' : radius,
+                    'limit': limit}
+            headers = {'X-Api-Key': self.config.get('NREL_TOKEN')}
+            
+            http = urllib3.PoolManager()
+            response = http.request('GET', self.config.get('STATIONS_NEAREST_LOC_URL'), fields=fields, headers=headers).data.decode("utf-8")
+            r.set(key, response)
+
+            results = json.loads(response)
+        return results
     

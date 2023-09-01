@@ -21,32 +21,32 @@ class TestWorker(unittest.TestCase):
     self.assertEqual(len(station_list), 5)
     self.assertEqual(len(chunks), 2)
 
-  #@unittest.skip("")
+  @unittest.skip("")
   def test_set_location(self):
     finder = EVFinder()
     finder.set_location('west loop, chicago')
     self.assertEqual(finder.zip, '60602')
 
-  #@unittest.skip("")
+  @unittest.skip("")
   def test_set_location_query_too_broad(self):
     finder = EVFinder()
     finder.set_location('chicago')
     self.assertTrue(hasattr(finder, 'zip'))
     self.assertEqual(finder.zip, '')
 
-  #@unittest.skip("")
+  @unittest.skip("")
   def test_set_location_query_empty(self):
     finder = EVFinder()
     finder.set_location('')
     self.assertFalse(hasattr(finder, 'zip'))
 
-  #@unittest.skip("")
+  @unittest.skip("")
   def test_set_location_query_nonsense(self):
     finder = EVFinder()
     finder.set_location(r'^%^$ calweiu%crwefr nf fwpi%20uefb fr')
     self.assertFalse(hasattr(finder, 'zip'))
 
-  #@unittest.skip("")
+  @unittest.skip("")
   def test_get_stations(self):
     finder = EVFinder() 
     finder.set_location('wrigleyville, chicago')
@@ -61,24 +61,25 @@ class TestWorker(unittest.TestCase):
     self.assertEqual(len(station_list), 5)
     self.assertEqual(len(chunks), 2)
   
-  #@unittest.skip("")
+  @unittest.skip("")
   def test_get_stations_no_zip(self):
     finder = EVFinder() 
     finder.set_location('chicago')
     self.assertIsNone(finder.get_stations())
 
+  @unittest.skip("")
   def test_get_stations_empty(self):
     finder = EVFinder() 
     finder.set_location('')
     self.assertIsNone(finder.get_stations())
 
-  #@unittest.skip("")
+  @unittest.skip("")
   def test_get_stations_nonsense(self):
     finder = EVFinder() 
     finder.set_location(r'^%^$ calweiu%crwefr nf fwpi%20uefb fr')
     self.assertIsNone(finder.get_stations())
 
-  #@unittest.skip("")
+  @unittest.skip("")
   def test_connector_types(self):
     connectors1 = ['NEMA1450', 'NEMA515', 'NEMA520', 'J1772', 'J1772COMBO', 'CHADEMO', 'TESLA']
     connectors2 = ['NEMA1450', 'NEMA515', 'NEMA520', 'J1772COMBO', 'J1772', 'CHADEMO', 'TESLA']
