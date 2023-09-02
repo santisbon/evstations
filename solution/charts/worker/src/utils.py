@@ -32,19 +32,20 @@ def get_connector_types(connectors):
 def form_list_of_stations(fuel_stations):
     results = []
 
-    for station in fuel_stations:
-        params = {
-            'sll': f"{station.get('latitude')},{station.get('longitude')}",
-            'q': station.get('street_address')
-            }
-        params_encoded = urlencode(params)
-        url = f"https://maps.apple.com/?{params_encoded}"
-        
-        results.append([
-            '🔌' + get_connector_types(station.get('ev_connector_types')),  
-            textwrap.shorten(station.get('station_name'), width=STATION_NAME_LENGTH, placeholder="..."), 
-            url
-            ])
+    if fuel_stations:
+        for station in fuel_stations:
+            params = {
+                'sll': f"{station.get('latitude')},{station.get('longitude')}",
+                'q': station.get('street_address')
+                }
+            params_encoded = urlencode(params)
+            url = f"https://maps.apple.com/?{params_encoded}"
+            
+            results.append([
+                '🔌' + get_connector_types(station.get('ev_connector_types')),  
+                textwrap.shorten(station.get('station_name'), width=STATION_NAME_LENGTH, placeholder="..."), 
+                url
+                ])
 
     return results
 

@@ -94,6 +94,7 @@ class EVFinder(object):
         except Exception as e:
             logging.error(e)
 
+    #@deprecated("Use get_stations_nearest")
     def get_stations(self):
         if hasattr(self,'zip') and self.zip:
             fields={'zip': self.zip,
@@ -110,16 +111,18 @@ class EVFinder(object):
             return None
 
     def get_stations_nearest(self, query, radius=50, limit=10):
+        query = str(query).replace('%', '')
         self.title = query
         key = str(query).strip().lower().replace(' ','+')
 
         cached = r.get(key)
 
+        logging.debug(key)
         if cached:
-            logging.info("Cache hit")
+            logging.debug("Cache hit")
             results = json.loads(cached)
         else:
-            logging.info("Cache miss")
+            logging.debug("Cache miss")
             fields={'location': query,
                     'status': 'E',
                     'fuel_type': 'ELEC',

@@ -46,6 +46,7 @@ def send_no_results_message(status, in_reply_to):
     http = urllib3.PoolManager()
     response = http.request('POST', url, headers=headers, fields=fields)
 
+#@deprecated("Use process_task")
 def process_message(ch, method, properties, body): 
     try:
         message = json.loads(body)
@@ -99,6 +100,51 @@ def process_message(ch, method, properties, body):
         logging.error(e)
         logging.error(traceback.format_exc())
 
+def process_task(ch, method, properties, body):
+    try:
+        message = json.loads(body)
+        query = message.get('query')
+        in_reply_to = message.get('status_id')
+        account = message.get('account')
+        
+        logging.debug(query)
+        finder = EVFinder()
+        formatted_stations = utils.form_list_of_stations(finder.get_stations_nearest(query).get('fuel_stations'))
+        logging.debug(formatted_stations)
+
+        if len(formatted_stations) == 0:
+            send_no_results_message(f'{account}\nI couldn\'t find any stations nearby. Please try another location.',
+                                    in_reply_to)
+        else:
+            full_list = tabulate(formatted_stations, tablefmt='plain') # plain | simple
+            chunks = utils.split_text_into_chunks(finder.title + '\n' + full_list)
+
+            for idx, chunk in enumerate(chunks, start=1):
+                status = f'{account}\n{chunk}'
+                logging.debug(f"Chunk {idx}:\n{chunk}\n")
+                
+                headers = {'Authorization': f"Bearer {MASTO_TOKEN}",
+                    'Idempotency-Key' : str(uuid.uuid4())
+                    }
+            
+                fields = {'status' : status,
+                    'in_reply_to_id' : in_reply_to,
+                    'visibility' : VISIBILITY
+                    }
+
+                http = urllib3.PoolManager()
+                response = http.request('POST', url, headers=headers, fields=fields) 
+
+                logging.debug(f"Sent chunk {idx}")
+                logging.debug("Response received:")
+                logging.debug(response.data.decode('utf-8'))
+                
+        ch.basic_ack(delivery_tag = method.delivery_tag)
+    except Exception as e:
+        logging.error('Error processing worker message.')
+        logging.error(e)
+        logging.error(traceback.format_exc())
+
 if __name__ == '__main__':
     try:
         credentials = pika.PlainCredentials(QUEUE_USER, QUEUE_PASSWORD)
@@ -111,7 +157,7 @@ if __name__ == '__main__':
         # If all the workers are busy, your queue can fill up. Keep an eye on that to add more workers, or use message TTL.
         channel.basic_qos(prefetch_count=1)
         
-        channel.basic_consume(queue=QUEUE, on_message_callback=process_message)
+        channel.basic_consume(queue=QUEUE, on_message_callback=process_task)
         channel.start_consuming()
     except Exception as e:
         logging.error("Error setting up queue worker.")
