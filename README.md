@@ -30,7 +30,7 @@ Query examples:
 
 ## Limitations
 * Station data including the available connector types is provided by the National Renewable Energy Laboratory at [NREL.gov](https://www.nrel.gov). It may differ from the data on Google and Apple maps. Check the station network's official website for more info.
-* Tested from Mastodon and Firefish accounts. It may or may not work from other Fediverse platforms.
+* Tested from Mastodon and Firefish accounts. It may or may not work from other Fediverse platforms. *Update:* A recent issue in Firefish is preventing users from seeing replies from any account, including this bot. 
 
 ## Technical Documentation
 
