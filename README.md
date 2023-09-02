@@ -1,7 +1,7 @@
 # EV Stations
 🧪 Experimental
 
-[@ev@botsin.space](https://botsin.space/@ev) is a Mastodon bot to get electric vehicle (EV) charging stations near a location in the **United States** or **Canada**. The location needs to be specific enough to narrow it down to a relatively small area like a neighborhood. An entire city or borough won't do because it's too broad to be useful.  
+[@ev@botsin.space](https://botsin.space/@ev) is a Mastodon bot to get electric vehicle (EV) charging stations near a location in the **United States** or **Canada**.  
 
 ## Highlights
 * Mention it with just a requested location and it will reply with some charging stations near it. 
@@ -22,18 +22,11 @@
 Post this from your Fediverse account:
 > `@ev@botsin.space` Brickell, Miami
 
-Commas are optional, but improve performance by reducing the complexity of the search.  
-
-**Good** query examples:  
+Query examples:  
 * `60601`
 * `Wrigley Field` 
 * `chinatown, chicago` 
 * `financial district, san francisco` 
-
-**Bad** query examples (too big to narrow down to a ZIP/postal code):
-* `nyc` 
-* `Los Angeles`
-* `brooklyn` 
 
 ## Limitations
 * Station data including the available connector types is provided by the National Renewable Energy Laboratory at [NREL.gov](https://www.nrel.gov). It may differ from the data on Google and Apple maps. Check the station network's official website for more info.
@@ -75,7 +68,6 @@ NAMESPACE=mynamespace
 helm dependency update
 
 helm upgrade $RELEASE $CHART -n $NAMESPACE --create-namespace -i \
-  --reuse-values \
   --set global.queue.svc=$RELEASE-rabbitmq \
   --set rabbitmq.auth.password=XXXXXXXXXX \
   --set rabbitmq.auth.erlangCookie=XXXXXXXXXX \
