@@ -8,7 +8,7 @@
 * The links provided in the results (even though they point to Apple Maps) will automatically open either Apple or Google Maps depending on your device.
 * If the response doesn't fit in one post due to Mastodon's character limit it will be split into a couple of posts.
 * The response includes symbols for the available connector types at each station:
-  * Ⓣ Tesla aka North American Charging Standard (NACS)
+  * Ⓣ Tesla aka North American Charging Standard (NACS) aka SAE J3400
   * Ⓙ J1772
   * ⒸⒸⓈ Combined Charging System (CCS) aka J1772 Combo
   * Ⓝ⑭-㊿ NEMA 14-50
